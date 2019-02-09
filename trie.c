@@ -34,14 +34,11 @@ static Trie makeTrie(){
 }
 
 Trie MakeEmptyTrie(Trie t){
-	size_t i = 0;
-
-	if(t == NULL){
-		return NULL;
-	}
-
-	for(i = 0; i < ALPHABET_SIZE; i++){
-		MakeEmptyTrie(t->children[i]);
+	if(t != NULL){
+		size_t i = 0;
+		for(i = 0; i < ALPHABET_SIZE; i++){
+			MakeEmptyTrie(t->children[i]);
+		}
 	}
 
 	free(t);
@@ -65,8 +62,8 @@ Trie Insert(Trie t, const char *key){
 
     if(trie->children[index] == NULL){
       trie->children[index] = makeTrie();
-      trie = trie->children[index];
     }
+    trie = trie->children[index];
   }
 
   // Mark last node as leaf
@@ -84,6 +81,7 @@ bool Search(Trie t, const char *key){
   size_t length = 0;
   size_t index = 0;
 
+	length = strlen(key);
   Trie trie = t;
 
   for(level = 0; level < length; level++){
