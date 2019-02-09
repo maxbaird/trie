@@ -22,8 +22,17 @@ static size_t char_to_index(char c){
   return (size_t)c - (size_t)'a';
 }
 
-static bool isEmpty(Trie t){
+static bool uninitialized(Trie t){
   return t == NULL;
+}
+
+static bool checkInit(Trie t, const char *func){
+	if(uninitialized(t)){
+		fprintf(stderr, "[%s Error]: Trie not initialized!\n", func);
+		return false;
+	}
+
+	return true;
 }
 
 static Trie makeTrie(){
@@ -43,7 +52,7 @@ static Trie makeTrie(){
 }
 
 static void freeTrie(Trie t){
-  if(!isEmpty(t)){
+  if(!uninitialized(t)){
     size_t i = 0;
     for(i = 0; i < ALPHABET_SIZE; i++){
       freeTrie(t->children[i]);
@@ -65,8 +74,7 @@ Trie TrieFree(Trie t){
 }
 
 void TrieInsert(Trie t, const char *key){
-  if(isEmpty(t)){
-    fprintf(stderr, "Trie not initialized!\n");
+  if(!checkInit(t, __func__)){
     return;
   }
 
@@ -91,8 +99,7 @@ void TrieInsert(Trie t, const char *key){
 }
 
 bool TrieSearch(Trie t, const char *key){
-  if(isEmpty(t)){
-    fprintf(stderr, "Trie is empty\n");
+  if(!checkInit(t, __func__)){
     return false;
   }
 
