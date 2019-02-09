@@ -34,15 +34,15 @@ static Trie makeTrie(){
 }
 
 Trie MakeEmptyTrie(Trie t){
-	if(t != NULL){
-		size_t i = 0;
-		for(i = 0; i < ALPHABET_SIZE; i++){
-			MakeEmptyTrie(t->children[i]);
-		}
-	}
+  if(t != NULL){
+    size_t i = 0;
+    for(i = 0; i < ALPHABET_SIZE; i++){
+      MakeEmptyTrie(t->children[i]);
+    }
+  }
 
-	free(t);
-	return NULL;
+  free(t);
+  return NULL;
 }
 
 Trie Insert(Trie t, const char *key){
@@ -81,7 +81,7 @@ bool Search(Trie t, const char *key){
   size_t length = 0;
   size_t index = 0;
 
-	length = strlen(key);
+  length = strlen(key);
   Trie trie = t;
 
   for(level = 0; level < length; level++){
