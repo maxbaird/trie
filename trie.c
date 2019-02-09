@@ -11,10 +11,8 @@ struct TrieNode{
   bool isEndOfWord;
 };
 
-static void safeFree (void **ptr)
-{
-  if (ptr != NULL && *ptr != NULL)
-  {
+static void safeFree (void **ptr){
+  if (ptr != NULL && *ptr != NULL){
     free(*ptr);
     *ptr = NULL;
   }
