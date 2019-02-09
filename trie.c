@@ -4,10 +4,21 @@
 #include <string.h>
 #include "trie.h"
 
+#define ALPHABET_SIZE 26
+
 struct TrieNode{
   struct TrieNode* children[ALPHABET_SIZE];
   bool isEndOfWord;
 };
+
+static void safeFree (void **ptr)
+{
+  if (ptr != NULL && *ptr != NULL)
+  {
+    free(*ptr);
+    *ptr = NULL;
+  }
+}
 
 static size_t char_to_index(char c){
   return (size_t)c - (size_t)'a';
@@ -33,26 +44,37 @@ static Trie makeTrie(){
   return trie;
 }
 
-Trie MakeEmptyTrie(Trie t){
-  if(t != NULL){
+static void freeTrie(Trie t){
+  if(!isEmpty(t)){
     size_t i = 0;
     for(i = 0; i < ALPHABET_SIZE; i++){
-      MakeEmptyTrie(t->children[i]);
+      freeTrie(t->children[i]);
     }
   }
 
-  free(t);
-  return NULL;
+  safeFree((void **)&t);
 }
 
-Trie Insert(Trie t, const char *key){
+Trie TrieMakeEmpty(Trie t){
+  freeTrie(t);
+  t = makeTrie();
+  return t;
+}
+
+Trie TrieFree(Trie t){
+  freeTrie(t);
+	return NULL;
+}
+
+void TrieInsert(Trie t, const char *key){
+  if(isEmpty(t)){
+    fprintf(stderr, "Trie not initialized!\n");
+    return;
+  }
+
   size_t level = 0;
   size_t length = 0;
   size_t index = 0;
-
-  if(t == NULL){
-    t = makeTrie();
-  }
 
   length = strlen(key);
   Trie trie = t;
@@ -68,10 +90,9 @@ Trie Insert(Trie t, const char *key){
 
   // Mark last node as leaf
   trie->isEndOfWord = true;
-  return t;
 }
 
-bool Search(Trie t, const char *key){
+bool TrieSearch(Trie t, const char *key){
   if(isEmpty(t)){
     fprintf(stderr, "Trie is empty\n");
     return false;
